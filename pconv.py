@@ -1,3 +1,7 @@
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
 class PartialConvolution(nn.Conv2d):
     def __init__(self, in_channels, out_channels, kernel_size,
                  stride=1, padding=0, dilation=1, groups=1, bias=True,
@@ -107,3 +111,4 @@ class PConvLayer(nn.Module):
         if hasattr(self, 'activation'):
             out = self.activation(out)
         return out, update_mask
+
