@@ -5,6 +5,9 @@ from glob import glob
 from torch.utils.data import DataLoader
 from torch.utils.data import Dataset
 import random
+import cv2
+import numpy as np
+from random import randint
 
 class InitDataset(Dataset):
     def __init__(self, data_root, img_transform, mask_transform, data='train'):
@@ -153,7 +156,7 @@ class MaskGenerator(object):
 def main():
   NUM_MASK = 1000
 
-  DIR_NAME = '/content/drive/MyDrive/Image Inpainting MIC/Image Inpainting MIC/data_new/mask'
+  DIR_NAME = './ckpt'
   if os.path.exists(DIR_NAME):
     pass
   else:
@@ -165,5 +168,5 @@ def main():
       mask = mask_generator.sample() * 255
       cv2.imwrite('{}/{}.png'.format(DIR_NAME, idx), mask)
 
-# if __name__ == '__main__':
-#     main()
+if __name__ == '__main__':
+    main()

@@ -1,5 +1,6 @@
 import oyaml as yaml
 import os
+import torch
 
 def create_ckpt_dir():
     ckpt_dir = "./ckpt"
