@@ -7,7 +7,6 @@ from torch.utils.data import Dataset
 import torch.nn.functional as F
 from random import randint
 import torch.nn as nn
-import oyaml as yaml
 from utils import Config, create_ckpt_dir, save_ckpt, load_ckpt, to_items
 from PIL import Image
 from dataset import InitDataset
