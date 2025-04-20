@@ -63,35 +63,40 @@ class Trainer(object):
     def iterate(self):
         print('Start the training')
         last_saved_model = 0
-        for step, (input, mask, gt) in enumerate(self.dataloader_train):
-            loss_dict = self.train(step + self.stepped, input, mask, gt)
-            self.losses.append(loss_dict)
-            # report the loss
-            if step % self.config.log_interval == 0:
-                self.report(step + self.stepped, loss_dict)
+        iters = self.stepped + 1
+        while(iters < self.config.max_iter):
+            for step, (input, mask, gt) in enumerate(self.dataloader_train):
+                iters += 1
+                if iters > self.config.max_iter:
+                    break
+                loss_dict = self.train(step + self.stepped, input, mask, gt)
+                self.losses.append(loss_dict)
+                # report the loss
+                if step % self.config.log_interval == 0:
+                    self.report(step + self.stepped, loss_dict)
 
-            # evaluation
-            if (step + self.stepped + 1) % self.config.vis_interval == 0 \
-                    or step == 0 or step + self.stepped == 0:
-                self.model.eval()
+                # evaluation
+                if (step + self.stepped + 1) % self.config.vis_interval == 0 \
+                        or step == 0 or step + self.stepped == 0:
+                    self.model.eval()
 
-                self.evaluate(self.model, self.dataset_val, self.device,
-                              '{}/val_vis/{}.png'.format(self.config.ckpt,
-                                                         step + self.stepped))
+                    self.evaluate(self.model, self.dataset_val, self.device,
+                                  '{}/val_vis/{}.png'.format(self.config.ckpt,
+                                                             step + self.stepped))
 
-            # save the model
-            if (step + self.stepped + 1) % self.config.save_model_interval == 0 \
-                    or (step + 1) == self.config.max_iter:
-                print('Saving the model...')
-                save_ckpt('{}/models/{}.pth'.format(self.config.ckpt,
-                                                    step + self.stepped + 1),
-                          [('model', self.model)],
-                          [('optimizer', self.optimizer)],
-                          step + self.stepped + 1)
-                last_saved_model = step + self.stepped + 1
+                # save the model
+                if (step + self.stepped + 1) % self.config.save_model_interval == 0 \
+                        or (step + 1) == self.config.max_iter:
+                    print('Saving the model...')
+                    save_ckpt('{}/models/{}.pth'.format(self.config.ckpt,
+                                                        step + self.stepped + 1),
+                              [('model', self.model)],
+                              [('optimizer', self.optimizer)],
+                              step + self.stepped + 1)
+                    last_saved_model = step + self.stepped + 1
 
-            if step >= self.config.max_iter:
-                break
+                if step >= self.config.max_iter:
+                    break
         return last_saved_model, self.losses
 
     def train(self, step, input, mask, gt):
