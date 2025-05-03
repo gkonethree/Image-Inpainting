@@ -4,7 +4,7 @@ cuda_id: 0
 finetune: False
 
 # the number of max iteration
-max_iter: 200000
+max_iter: 2000
 # the batch size
 batch_size: 6
 
@@ -31,12 +31,12 @@ momentum: 0
 weight_decay: 0
 
 # visualizing the output images
-vis_interval: 2000
+vis_interval: 200
 # saving the model
-save_model_interval: 4000
+save_model_interval: 400
 # printing the losses to standard output line
 log_interval: 100
 
 # paths
-data_root: /kaggle/input/celeba
+data_root: ./data_new
 ckpt: ckpt
